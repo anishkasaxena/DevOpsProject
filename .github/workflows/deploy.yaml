@@ -26,7 +26,13 @@ jobs:
         run: |
             sudo apt-get update && sudo apt-get install -y kubectl
             kubectl version --client
-            aws eks --region us-east-1 update-kubeconfig --name demo
+      
+      - name: Configure AWS Credentials
+        run: |
+              echo "[default]" > ~/.aws/credentials
+              echo "aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}" >> ~/.aws/credentials
+              echo "aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> ~/.aws/credentials
+              aws eks --region us-east-1 update-kubeconfig --name demo
 
       - name: Deploy to EKS
         run: |
