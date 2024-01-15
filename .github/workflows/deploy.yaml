@@ -26,6 +26,7 @@ jobs:
         run: |
             sudo apt-get update && sudo apt-get install -y kubectl
             kubectl version --client
+            aws eks --region us-east-1 update-kubeconfig --name demo
 
       - name: Deploy to EKS
         run: |
