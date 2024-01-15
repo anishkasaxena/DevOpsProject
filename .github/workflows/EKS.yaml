@@ -22,18 +22,10 @@ jobs:
       cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
   Deploy:
-    needs: Apply
-    name: Deploy
-    runs-on: ubuntu-latest
-    steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v2
-        - name: Deploy to EKS
-          run: |
-            aws eks --region us-east-1 update-kubeconfig --name demo
-            kubectl apply -f deployment.yaml
-            kubectl apply -f public-lb.yaml
-            kubectl apply -f cluster-autoscaler.yaml
-    
-    # uses: anishkasaxena/DevOpsProject/.github/workflows/deploy.yaml@featurebranch
+    name:  Apply
+    uses: anishkasaxena/DevOpsProject/.github/workflows/deploy.yaml@featurebranch
+    with:
+      gh_environment: dev
+    # secrets:
+    #   cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}  
 
