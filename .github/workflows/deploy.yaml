@@ -1,0 +1,62 @@
+name: EKS Deploy
+
+on:
+    push:
+        branches:
+            - featurebranch
+
+  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Install kubectl
+      run: |
+        curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x ./kubectl
+        sudo mv ./kubectl /usr/local/bin/kubectl
+
+    - name: Configure kubectl
+      run: |
+        aws eks --region us-east-1 update-kubeconfig --name demo
+
+    - name: Deploy to EKS
+      run: |
+        kubectl apply -f deployment.yaml
+        kubectl apply -f cluster-autoscaler.yaml
+        kubectl apply -f public-lb.yaml
+    
+    - name: EKS Pod  status
+      run: |
+        kubectl get pods --all-namespaces -o wide
+
+
+    # - name: Get Pod Name
+    #   id: get_pod_name
+    #   run: |
+    #       POD_NAME=$(kubectl get pods -l hello-app -o jsonpath='{.items[0].metadata.name}')
+    #       echo "Pod name is $POD_NAME"
+    #       echo "POD_NAME=$POD_NAME" >> $GITHUB_ENV
+
+    # - name: Health Check
+    #   run: |
+    #     POD_NAME=$POD_NAME
+    #     kubectl port-forward pod/$POD_NAME 8080:80 &
+    #     sleep 5  # Give time for port-forward to start
+    #     curl http://localhost:8080/health
+    #     pkill -f "kubectl port-forward"
+        
+        
+        
