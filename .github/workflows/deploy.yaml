@@ -22,6 +22,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
+      - name: Install kubectl
+        run: |
+            sudo apt-get update && sudo apt-get install -y kubectl
+            kubectl version --client
+
       - name: Deploy to EKS
         run: |
             kubectl apply -f deployment.yaml
