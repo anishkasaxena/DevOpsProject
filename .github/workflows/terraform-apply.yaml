@@ -30,7 +30,9 @@
             
     
         - name: Terraform Apply
-          run: terraform apply -auto-approve
+          run: |
+            cd Terraform
+            terraform apply -auto-approve
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             TF_ACTION_WORKING_DIR: '.'
