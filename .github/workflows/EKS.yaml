@@ -1,0 +1,25 @@
+name: "01-EKS"
+on:
+    push:
+        branches:
+            - feature_branch
+
+jobs:
+  Plan:
+    uses: anishkasaxena/DevOpsProject/.github/workflows/tf_plan.yaml@feature_branch
+    
+    with:
+      gh_environment: dev
+    secrets:
+      cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+  Apply:
+    needs: Plan
+    uses: anishkasaxena/DevOpsProject/.github/workflows/tf_apply.yaml@feature_branch
+    with:
+      gh_environment: dev
+    secrets:
+      cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+
+
