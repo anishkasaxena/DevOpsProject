@@ -38,10 +38,10 @@ resource "aws_eks_node_group" "public-nodes" {
     aws_subnet.public-us-east-1a.id,
     aws_subnet.public-us-east-1b.id
   ]
-    remote_access {
-    ec2_ssh_key               = aws_key_pair.eks_key_pair.key_name
-    source_security_group_ids = [aws_security_group.TF_SG.id]
-  }
+  #   remote_access {
+  #   ec2_ssh_key               = aws_key_pair.eks_key_pair.key_name
+  #   source_security_group_ids = [aws_security_group.TF_SG.id]
+  # }
 
   
   
@@ -93,7 +93,7 @@ resource "aws_eks_node_group" "public-nodes" {
   }
 }
 
-resource "aws_key_pair" "eks_key_pair" {
-  key_name   = "eks-node-key-pair"
-  public_key = file("~/.ssh/id_rsa.pub")  # Replace with the path to your public key file
-}
+# resource "aws_key_pair" "eks_key_pair" {
+#   key_name   = "eks-node-key-pair"
+#   public_key = file("~/.ssh/id_rsa.pub")  # Replace with the path to your public key file
+# }
