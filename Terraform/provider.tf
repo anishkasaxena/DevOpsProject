@@ -9,11 +9,13 @@ terraform {
       version = "~> 3.0"
     }
   }
-}
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "DevOpsProject-terraform-state"
 
-  versioning {
-    enabled = true
-  }
+backend "remote" {
+		hostname = "app.terraform.io"
+		organization = "Devsecops-org"
+
+		workspaces {
+			name = "Devsecops-org"
+		}
+	}
 }

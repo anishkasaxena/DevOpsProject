@@ -1,40 +1,40 @@
-    name: Deploy
+    # name: Deploy
 
-    on:
-      push:
-        branches:
-          - feature2
+    # on:
+    #   push:
+    #     branches:
+    #       - feature2
     
-    jobs:
-      Terraform:
-        name: Terraform Plan & Apply
-        runs-on: ubuntu-latest
-        steps:
+    # jobs:
+    #   Terraform:
+    #     name: Terraform Plan & Apply
+    #     runs-on: ubuntu-latest
+    #     steps:
     
-        - name: Checkout Repo
-          uses: actions/checkout@v2
+    #     - name: Checkout Repo
+    #       uses: actions/checkout@v2
     
-        - name: Terraform Setup
-          uses: hashicorp/setup-terraform@v1
+    #     - name: Terraform Setup
+    #       uses: hashicorp/setup-terraform@v1
           
-        - name: Terraform Init
-          run: |
-             cd Terraform
-             terraform init
-             terraform plan
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            TF_ACTION_WORKING_DIR: '.'
-            AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     - name: Terraform Init
+    #       run: |
+    #          cd Terraform
+    #          terraform init
+    #          terraform plan
+    #       env:
+    #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #         TF_ACTION_WORKING_DIR: '.'
+    #         AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #         AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             
     
-        - name: Terraform Apply
-          run: |
-            cd Terraform
-            terraform apply -auto-approve
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            TF_ACTION_WORKING_DIR: '.'
-            AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     - name: Terraform Apply
+    #       run: |
+    #         cd Terraform
+    #         terraform apply -auto-approve
+    #       env:
+    #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #         TF_ACTION_WORKING_DIR: '.'
+    #         AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #         AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}

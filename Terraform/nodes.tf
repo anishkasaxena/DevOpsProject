@@ -39,8 +39,9 @@ resource "aws_eks_node_group" "public-nodes" {
     aws_subnet.public-us-east-1b.id
   ]
   #   remote_access {
-  #   ec2_ssh_key               = aws_key_pair.eks_key_pair.key_name
-  #   source_security_group_ids = [aws_security_group.TF_SG.id]
+  #     source_security_group_ids = [aws_security_group.TF_SG.id]
+  #     ec2_ssh_key               = var.key_pair
+    
   # }
 
   
@@ -58,8 +59,6 @@ resource "aws_eks_node_group" "public-nodes" {
     max_unavailable = 1
   }
   
-    # security_group_ids = [aws_security_group.eks_node_group_sg.id]
-  
 
   labels = {
     role = "general"
@@ -73,25 +72,25 @@ resource "aws_eks_node_group" "public-nodes" {
 }
 
    
-  resource "aws_security_group" "eks_node_group_sg" {
-  name        = "eks-node-group-sg"
-  description = "Security group for EKS node group"
-  vpc_id      = aws_vpc.main.id
+#   resource "aws_security_group" "eks_node_group_sg" {
+#   name        = "eks-node-group-sg"
+#   description = "Security group for EKS node group"
+#   vpc_id      = aws_vpc.main.id
   
 
-  ingress {
-    from_port = 80
-    to_port   = 80
-    protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
+#   ingress {
+#     from_port = 80
+#     to_port   = 80
+#     protocol  = "tcp"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+# }
 
 # resource "aws_key_pair" "eks_key_pair" {
 #   key_name   = "eks-node-key-pair"
