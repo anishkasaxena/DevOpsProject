@@ -6,6 +6,13 @@ on:
     branches:
       - feature2
 
+env:
+    TF_CLOUD_ORGANIZATION: "Devsecops-org"
+    TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+    TF_WORKSPACE: "terraform-github-actions"
+    CONFIG_DIRECTORY: "./"
+      
+
 jobs:
   Terraform:
     name: Terraform Plan & Apply
@@ -17,22 +24,21 @@ jobs:
 
     - name: Terraform Setup
       uses: hashicorp/setup-terraform@v1
-      
+
+
     - name: Terraform Init
-      run: terraform init
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TF_ACTION_WORKING_DIR: '.'
-        AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        
-    - name: Terraform validate
-      run: terraform validate
+      run: |
+        cd Terraform
+        terraform init -backend-config="token=${TF_API_TOKEN}"
 
     - name: Terraform Apply
       run: terraform apply -auto-approve
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TF_ACTION_WORKING_DIR: '.'
-        AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Upload Configuration
+      uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.0.0
+      id: plan-upload
+      with:
+        workspace: ${{ env.TF_WORKSPACE }}
+        directory: ${{ env.CONFIG_DIRECTORY }}
+        speculative: true
+      
